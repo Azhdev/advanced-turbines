@@ -48,6 +48,7 @@ public class TileEntityTurbine extends TileEntity implements ISidedInventory, IE
 	public TileEntityTurbine(){
 		items = new ItemStack[1];
 		buffer = new EnergyStorage(1000);
+		tank = new FluidTank(1000);
 	}
 	
 	@Override
@@ -277,6 +278,10 @@ public class TileEntityTurbine extends TileEntity implements ISidedInventory, IE
 		this.temp_type = temp_type;
 	}
 
+	private void convertSteamIntoPower(){
+		
+	}
+	
 	@Override
 	public int getSizeInventory() {
 		return items.length;
@@ -382,7 +387,7 @@ public class TileEntityTurbine extends TileEntity implements ISidedInventory, IE
 			return 0;
 		if(resource.getFluid() == null)
 			return 0;
-		if(resource.getFluid().getID() != FluidRegistry.LAVA.getID()){
+		if(resource.getFluid().getID() != FluidRegistry.getFluidID("Steam")){
 			return 0;
 		}
 
