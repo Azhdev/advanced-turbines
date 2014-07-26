@@ -18,12 +18,10 @@ public class GuiHandler implements IGuiHandler{
 			if (te != null && te instanceof TileEntityTurbine) {
 				return new ContainerTurbine(player.inventory, (TileEntityTurbine)te);
 			}
-			
-			
-		default:
-			return null;
+			break;
+
 		}
-		
+		return null;
 	}
 
 	@Override
@@ -34,10 +32,10 @@ public class GuiHandler implements IGuiHandler{
 			if (te != null && te instanceof TileEntityTurbine) {
 				return new GUITurbine(player.inventory, (TileEntityTurbine)te);
 			}
-			
-		default:
-			return null;
+			break;
+
 		}
+		return null;
 	}
 
 }

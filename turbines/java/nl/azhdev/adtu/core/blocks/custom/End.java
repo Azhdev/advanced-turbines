@@ -18,21 +18,5 @@ public class End extends GenericAzhdevBlock implements ITileEntityProvider{
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
 		return new TileEntityEnd();
-	}
-
-	@Override
-	public void onEntityWalking(World world, int x, int y, int z, Entity entity){
-		if(!world.isRemote){
-			if(entity instanceof EntityPlayer){
-				for(int i = - 2; i < 2; i++){
-					for(int j = -2; j < 2; j++){
-						for(int u = 256; u > 0; u--){
-							world.setBlockToAir(x + i, u, z + j);
-						}
-					}
-				}
-			}
-		}
-	}
-	
+	}	
 }
