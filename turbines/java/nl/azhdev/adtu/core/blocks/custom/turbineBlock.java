@@ -9,6 +9,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import nl.azhdev.adtu.adtu;
 import nl.azhdev.adtu.core.TileEntities.custom.TileEntityTurbine;
+import nl.azhdev.adtu.core.TileEntities.custom.TileEntityTurbineBasic;
 import nl.azhdev.adtu.core.generic.GenericAzhdevBlock;
 import nl.azhdev.adtu.core.generic.GenericAzhdevBlockContainer;
 import nl.azhdev.adtu.core.items.adtuItems;
@@ -22,8 +23,8 @@ public class turbineBlock extends GenericAzhdevBlockContainer{
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World var1, int var2) {
-		return new TileEntityTurbine();
+	public TileEntity createNewTileEntity(World world, int var2) {
+		return new TileEntityTurbineBasic();
 	}
 	
 	@Override
