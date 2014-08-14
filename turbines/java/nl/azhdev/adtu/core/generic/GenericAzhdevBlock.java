@@ -6,7 +6,7 @@ import nl.azhdev.adtu.core.util.CreativeTabAT;
 
 public class GenericAzhdevBlock extends Block{
 
-	protected GenericAzhdevBlock(Material mat) {
+	public GenericAzhdevBlock(Material mat) {
 		super(mat);
 		setBlockName("adtu_" + getClass().getSimpleName() + "_AzhdevBlock");
 		setBlockTextureName("adtu:" + getClass().getSimpleName());

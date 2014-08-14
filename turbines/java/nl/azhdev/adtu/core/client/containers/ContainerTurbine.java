@@ -11,6 +11,7 @@ public class ContainerTurbine extends Container {
 	private TileEntityTurbine turbine;
 	
 	public ContainerTurbine(InventoryPlayer playerInv, TileEntityTurbine tur){
+		super();
 		this.turbine = tur;
 		addVanillaSlots(playerInv);
 		addSlotToContainer(new Slot(turbine, 0, 80, 29));
@@ -30,7 +31,7 @@ public class ContainerTurbine extends Container {
 	
 	@Override
 	public boolean canInteractWith(EntityPlayer var1) {
-		return true;
+		return turbine.isUseableByPlayer(var1);
 	}
 
 }

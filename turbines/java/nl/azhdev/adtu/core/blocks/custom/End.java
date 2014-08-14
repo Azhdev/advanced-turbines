@@ -7,6 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import nl.azhdev.adtu.core.TileEntities.custom.TileEntityEnd;
+import nl.azhdev.adtu.core.TileEntities.custom.TileEntityHousing;
 import nl.azhdev.adtu.core.generic.GenericAzhdevBlock;
 
 public class End extends GenericAzhdevBlock implements ITileEntityProvider{
@@ -18,21 +19,14 @@ public class End extends GenericAzhdevBlock implements ITileEntityProvider{
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
 		return new TileEntityEnd();
-	}
-
-	@Override
-	public void onEntityWalking(World world, int x, int y, int z, Entity entity){
-		if(!world.isRemote){
-			if(entity instanceof EntityPlayer){
-				for(int i = - 2; i < 2; i++){
-					for(int j = -2; j < 2; j++){
-						for(int u = 256; u > 0; u--){
-							world.setBlockToAir(x + i, u, z + j);
-						}
-					}
-				}
-			}
-		}
-	}
+	}	
 	
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int j, float p_149727_7_, float p_149727_8_, float p_149727_9_){
+		if(!world.isRemote){
+			TileEntityHousing housing = (TileEntityHousing) world.getTileEntity(x, y, z);
+			System.out.println(housing.isPartOfMultiBlock());
+		}
+		return true;
+	}
 }

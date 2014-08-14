@@ -44,7 +44,7 @@ public class adtu {
 		CreativeTabAT.registerCreativeTabs();
 		adtuFluids.initFluids();
 		adtuBlocks.init();
-		adtuTileEntities.init();
+		
 		adtuItems.init();
 		Turbines.initTurbines();
 		proxy.initRendering();
@@ -53,7 +53,7 @@ public class adtu {
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event){
-		
+		adtuTileEntities.init();
 		
 	}
 	
