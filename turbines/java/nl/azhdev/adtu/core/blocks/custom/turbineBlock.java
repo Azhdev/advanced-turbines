@@ -1,22 +1,18 @@
-package nl.azhdev.adtu.core.blocks.custom;
+package nl.Azhdev.adtu.core.blocks.custom;
 
-import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
-import nl.azhdev.adtu.adtu;
-import nl.azhdev.adtu.core.TileEntities.custom.TileEntityTurbine;
-import nl.azhdev.adtu.core.TileEntities.custom.TileEntityTurbineBasic;
-import nl.azhdev.adtu.core.generic.GenericAzhdevBlock;
-import nl.azhdev.adtu.core.generic.GenericAzhdevBlockContainer;
-import nl.azhdev.adtu.core.items.adtuItems;
+import nl.Azhdev.adtu.adtu;
+import nl.Azhdev.adtu.core.TileEntities.custom.TileEntityTurbineBasic;
+import nl.Azhdev.adtu.core.blocks.adtuBlocks;
+import nl.Azhdev.adtu.core.generic.GenericAzhdevBlockContainer;
+import nl.Azhdev.adtu.turbine.Turbines;
 
 public class turbineBlock extends GenericAzhdevBlockContainer{
-	
-	public TileEntityTurbine turbine;
 	
 	public turbineBlock(Material mat) {
 		super(mat);
@@ -30,7 +26,23 @@ public class turbineBlock extends GenericAzhdevBlockContainer{
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int j, float p_149727_7_, float p_149727_8_, float p_149727_9_){
 		if(!world.isRemote){
-			player.openGui(adtu.instance, 0, world, x, y, z);
+			if(player.getHeldItem() != null && player.getHeldItem().getItem() == Items.diamond){
+				world.setBlock(x, y, z, adtuBlocks.lavalTurbine);
+				TileEntityTurbineBasic tile = (TileEntityTurbineBasic)world.getTileEntity(x, y, z);
+				tile.setType(Turbines.laval);
+			}else if(player.getHeldItem() != null && player.getHeldItem().getItem() == Items.iron_ingot){
+				world.setBlock(x, y, z, adtuBlocks.tinyTurbine);
+				TileEntityTurbineBasic tile = (TileEntityTurbineBasic)world.getTileEntity(x, y, z);
+				tile.setType(Turbines.tiny);
+			}
+		}
+		if(player.isSneaking()){
+			TileEntityTurbineBasic tile = (TileEntityTurbineBasic)world.getTileEntity(x, y, z);
+			
+			if(tile.getType() != null){
+				String v = "" + tile.getType().getTurbineName();
+				player.addChatComponentMessage(new ChatComponentText(v));
+			}
 		}
 		return true;
 	}

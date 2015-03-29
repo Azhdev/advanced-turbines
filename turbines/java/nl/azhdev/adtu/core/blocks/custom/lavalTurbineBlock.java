@@ -1,12 +1,12 @@
-package nl.azhdev.adtu.core.blocks.custom;
+package nl.Azhdev.adtu.core.blocks.custom;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import nl.azhdev.adtu.core.TileEntities.custom.TileEntityTurbineBasic;
-import nl.azhdev.adtu.core.generic.GenericAzhdevBlockContainer;
+import nl.Azhdev.adtu.core.TileEntities.custom.TileEntityTurbineBasic;
+import nl.Azhdev.adtu.core.generic.GenericAzhdevBlockContainer;
 
-public class lavalTurbineBlock extends GenericAzhdevBlockContainer {
+public class lavalTurbineBlock extends turbineBlock {
 
 	public lavalTurbineBlock(Material mat) {
 		super(mat);

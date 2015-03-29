@@ -1,6 +1,6 @@
-package nl.azhdev.adtu.turbine.types;
+package nl.Azhdev.adtu.turbine.types;
 
-import nl.azhdev.adtu.turbine.Turbine;
+import nl.Azhdev.adtu.turbine.Turbine;
 
 public class TurbineUnknown extends Turbine {
 	

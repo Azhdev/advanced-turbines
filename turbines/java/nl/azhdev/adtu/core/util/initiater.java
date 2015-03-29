@@ -1,4 +1,4 @@
-package nl.azhdev.adtu.core.util;
+package nl.Azhdev.adtu.core.util;
 
 public class initiater {
 

@@ -1,12 +1,12 @@
-package nl.azhdev.adtu.core.blocks;
+package nl.Azhdev.adtu.core.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import nl.azhdev.adtu.core.blocks.custom.End;
-import nl.azhdev.adtu.core.blocks.custom.TurbineHousing;
-import nl.azhdev.adtu.core.blocks.custom.lavalTurbineBlock;
-import nl.azhdev.adtu.core.blocks.custom.tinyTurbineBlock;
-import nl.azhdev.adtu.core.blocks.custom.turbineBlock;
+import nl.Azhdev.adtu.core.blocks.custom.End;
+import nl.Azhdev.adtu.core.blocks.custom.TurbineHousing;
+import nl.Azhdev.adtu.core.blocks.custom.lavalTurbineBlock;
+import nl.Azhdev.adtu.core.blocks.custom.tinyTurbineBlock;
+import nl.Azhdev.adtu.core.blocks.custom.turbineBlock;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class adtuBlocks {

@@ -1,9 +1,9 @@
-package nl.azhdev.adtu.core.handlers;
+package nl.Azhdev.adtu.core.handlers;
 
 import java.io.File;
 
 import net.minecraftforge.common.config.Configuration;
-import nl.azhdev.adtu.lib.Reference;
+import nl.Azhdev.adtu.lib.AdtuConstants;
 
 public class configHandler{
 	
@@ -12,7 +12,7 @@ public class configHandler{
 		
 		config.load();
 		
-		Reference.loadIC2 = config.get("mods loaded", "IC2", Reference.loadIC2_default).getBoolean(Reference.loadIC2_default);
+		AdtuConstants.useDebugCode = config.getBoolean("use debugging code", "MISC", AdtuConstants.useDebugCode_default, "enable this to see the debugging code (your chat might get spammed a bit)");
 		
 		config.save();
 	}

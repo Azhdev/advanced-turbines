@@ -1,6 +1,6 @@
-package nl.azhdev.adtu.core.util;
+package nl.Azhdev.adtu.core.util;
 
-import nl.azhdev.adtu.lib.Reference;
+import nl.Azhdev.adtu.lib.Reference;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;

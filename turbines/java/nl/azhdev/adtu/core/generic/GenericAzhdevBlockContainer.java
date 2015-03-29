@@ -1,10 +1,10 @@
-package nl.azhdev.adtu.core.generic;
+package nl.Azhdev.adtu.core.generic;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import nl.azhdev.adtu.core.util.CreativeTabAT;
+import nl.Azhdev.adtu.core.util.CreativeTabAT;
 
 public class GenericAzhdevBlockContainer extends BlockContainer{
 	

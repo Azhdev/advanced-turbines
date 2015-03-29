@@ -1,12 +1,19 @@
-package nl.azhdev.adtu.turbine;
+package nl.Azhdev.adtu.turbine;
 
 import net.minecraft.block.Block;
-import nl.azhdev.adtu.core.blocks.adtuBlocks;
-
-public class Turbine{
+import nl.Azhdev.adtu.core.blocks.adtuBlocks;
+/**
+ * 
+ * @author Azhdev
+ *
+ * Turbine.java created at 15:23:04 27 jan. 2015
+ *
+ */
+public class Turbine implements ITurbine{
 	private int minSteamInput;
 	private int maxSteamInput;
 	private int maxRFOutput;
+	private int blockAmount;
 	private Block masterBlock;
 	private String TurbineName;
 	
@@ -14,8 +21,17 @@ public class Turbine{
 		setMaxRFOutput(0);
 		setMinSteamInput(0);
 		setMaxSteamInput(0);
+		setMaxBlockAmount(0);
 		setMasterBlock(adtuBlocks.turbineBlock);
 		setTurbineName("");
+	}
+	
+	public void setMaxBlockAmount(int amount){
+		blockAmount = amount;
+	}
+	
+	public int getMaxBlockAmount(){
+		return blockAmount;
 	}
 	
 	public void setTurbineName(String name) {
@@ -51,11 +67,14 @@ public class Turbine{
 		this.maxRFOutput = maxRFOutput;
 	}
 
-	public Block getBlock() {
+	public Block getMasterBlock() {
 		return masterBlock;
 	}
 
-	public void setMasterBlock(Block masterBlock) {
-		this.masterBlock = masterBlock;
+	@Override
+	public void setMasterBlock(Block nmasterBlock) {
+		masterBlock = nmasterBlock;
 	}
+
+	
 }

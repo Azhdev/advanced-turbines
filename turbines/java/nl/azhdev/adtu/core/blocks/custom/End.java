@@ -1,14 +1,15 @@
-package nl.azhdev.adtu.core.blocks.custom;
+package nl.Azhdev.adtu.core.blocks.custom;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
-import nl.azhdev.adtu.core.TileEntities.custom.TileEntityEnd;
-import nl.azhdev.adtu.core.TileEntities.custom.TileEntityHousing;
-import nl.azhdev.adtu.core.generic.GenericAzhdevBlock;
+import nl.Azhdev.adtu.core.TileEntities.custom.TileEntityEnd;
+import nl.Azhdev.adtu.core.TileEntities.custom.TileEntityHousing;
+import nl.Azhdev.adtu.core.generic.GenericAzhdevBlock;
+import nl.Azhdev.adtu.lib.AdtuConstants;
 
 public class End extends GenericAzhdevBlock implements ITileEntityProvider{
 
@@ -25,7 +26,10 @@ public class End extends GenericAzhdevBlock implements ITileEntityProvider{
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int j, float p_149727_7_, float p_149727_8_, float p_149727_9_){
 		if(!world.isRemote){
 			TileEntityHousing housing = (TileEntityHousing) world.getTileEntity(x, y, z);
-			System.out.println(housing.isPartOfMultiBlock());
+			if(AdtuConstants.useDebugCode){
+				String output = "" + housing.isPartOfMultiBlock();
+				player.addChatComponentMessage(new ChatComponentText(output));
+			}
 		}
 		return true;
 	}

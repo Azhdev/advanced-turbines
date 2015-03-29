@@ -1,4 +1,4 @@
-package nl.azhdev.adtu.core.generic;
+package nl.Azhdev.adtu.core.generic;
 
 import net.minecraft.tileentity.TileEntity;
 

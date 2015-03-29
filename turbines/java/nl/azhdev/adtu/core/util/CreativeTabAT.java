@@ -1,8 +1,8 @@
-package nl.azhdev.adtu.core.util;
+package nl.Azhdev.adtu.core.util;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import nl.azhdev.adtu.core.items.adtuItems;
+import nl.Azhdev.adtu.core.items.adtuItems;
 
 public class CreativeTabAT {
 	public static CreativeTabs creativeTabAT;
@@ -12,7 +12,7 @@ public class CreativeTabAT {
 
 			@Override
 			public Item getTabIconItem() {
-				return adtuItems.Wrench;
+				return adtuItems.Wheel;
 			}
 			
 		};

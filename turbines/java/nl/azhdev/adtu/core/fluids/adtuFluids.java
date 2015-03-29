@@ -1,4 +1,4 @@
-package nl.azhdev.adtu.core.fluids;
+package nl.Azhdev.adtu.core.fluids;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;

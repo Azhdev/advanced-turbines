@@ -1,6 +1,7 @@
-package nl.azhdev.adtu.core.proxy;
+package nl.Azhdev.adtu.core.proxy;
 
-import nl.azhdev.adtu.core.util.Log;
+import nl.Azhdev.adtu.core.util.Log;
+
 
 public class commonProxy {
 	public void initRendering(){

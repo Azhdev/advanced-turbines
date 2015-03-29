@@ -1,18 +1,21 @@
-package nl.azhdev.adtu.core.TileEntities.custom;
+package nl.Azhdev.adtu.core.TileEntities.custom;
+
+import java.util.ArrayList;
 
 import net.minecraft.block.Block;
-import net.minecraft.world.World;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import nl.azhdev.adtu.core.blocks.adtuBlocks;
-import nl.azhdev.adtu.core.generic.AzhdevTileEntity;
-import nl.azhdev.adtu.core.util.Log;
-import nl.azhdev.adtu.turbine.Turbine;
-import nl.azhdev.adtu.turbine.Turbines;
+import nl.Azhdev.adtu.core.blocks.adtuBlocks;
+import nl.Azhdev.adtu.core.generic.AzhdevTileEntity;
+import nl.Azhdev.adtu.turbine.Turbine;
 
 /**
  * 
@@ -23,337 +26,87 @@ import nl.azhdev.adtu.turbine.Turbines;
  * the basic class of the turbineTileEntities
  */
 
-public class TileEntityTurbineBasic extends AzhdevTileEntity implements IFluidHandler{
-	private Block end = adtuBlocks.End;
-	private Block h = adtuBlocks.TurbineHousing;
+public class TileEntityTurbineBasic extends AzhdevTileEntity implements IFluidHandler, IInventory{
 	private TileEntityEnd TileEnd;
 	private Turbine type;
 	private ForgeDirection direction;
-	private boolean isAMultiBlock = false;
-	private boolean firstAsMB = true;
-	private boolean firstAsSingle = true;
+	private ArrayList<int[]> locations = new ArrayList<int[]>();
+	private ArrayList<Block> blocks = new ArrayList<Block>();
 	private FluidTank tank;
+	private int CurrentBlockAmount;
+	private int MaxBlockAmount;
 	
 	public TileEntityTurbineBasic(){
-		tank = new FluidTank(1000);
+		tank = new FluidTank(16000);
 	}
 	
 	@Override
 	public void updateEntity(){
 		if(!worldObj.isRemote){
-			isAMultiBlock = isAMultiBlock();
-			if(isAMultiBlock){
-				if(firstAsMB){
-					firstAsMB = false;
-					firstAsMB();
-					firstAsSingle = true;
-				}
-				//output section
-				if(canOutput()){
-					outputEnergy();
-					removeSteam();
-				}
-			}else{
-				if(firstAsSingle){
-					firstAsSingle();
-					firstAsSingle = false;
-					firstAsMB = true;
-				}
-			}
-			type = getType(worldObj, xCoord, yCoord, zCoord);
-			setCorrectBlock(xCoord, yCoord, zCoord);
-			
-			
-			
+			if(hasType())setMaxBlockAmount(type.getMaxBlockAmount());
 		}
 	}
 
-	private void removeSteam() {
-		
-	}
-
-	private void outputEnergy() {
-		
-	}
-
-	private boolean canOutput() {
-		return false;
-	}
-
-	private void firstAsSingle() {
-		//TODO remove from multiblock, remove rendering etc.
-		Log.addInfo("multiBlock at: " + xCoord + ", " + yCoord + ", " + zCoord + " has been removed");
-		this.setPartOfMB(worldObj, xCoord, yCoord, zCoord, direction, type, false);
-	}
-
-	private void firstAsMB() {
-		//TODO add to multiblock, rendering etc.
-		Log.addInfo("multiBlock Formed at: " + xCoord + ", " + yCoord + ", " + zCoord);
-		Log.addInfo("multiBlock has type: " + type.getTurbineName() + "and direction: " + direction.name());
-		this.setPartOfMB(worldObj, xCoord, yCoord, zCoord, direction, type, true);
-	}
-
-	private boolean isAMultiBlock(){
-		if(worldObj.getBlock(xCoord, yCoord, zCoord) != adtuBlocks.turbineBlock){
-			return true;
-		}else{
-			return false;
-		}
+	public boolean hasType(){
+		return type != null;
 	}
 	
-	public void setCorrectBlock(int x, int y, int z){
-		if(type != null && type != Turbines.unknown){
-			if(isRestFilled(worldObj, x, y, z) /*&& !isHousingAlreadyPart(direction)*/){
-				worldObj.setBlock(x, y, z, type.getBlock());
-			}else{
-				worldObj.setBlock(x, y, z, adtuBlocks.turbineBlock);
-			}
-		}else{
-			worldObj.setBlock(x, y, z, adtuBlocks.turbineBlock);
-		}
+	public void setType(Turbine nType){
+		type = nType;
 	}
 	
-	public Turbine getType(World world, int x, int y, int z){
-		if(world.getBlock(x - 1, y, z) == end){
-			direction = ForgeDirection.WEST;
-			return Turbines.tiny;
-		}else if(world.getBlock(x + 1, y, z) == end){
-			direction = ForgeDirection.EAST;
-			return Turbines.tiny;
-		}else if(world.getBlock(x, y, z - 1) == end){
-			direction = ForgeDirection.SOUTH;
-			return Turbines.tiny;
-		}else if(world.getBlock(x, y, z + 1) == end){
-			direction = ForgeDirection.NORTH;
-			return Turbines.tiny;
-		}else if(world.getBlock(x - 3, y, z) == end){
-			direction = ForgeDirection.WEST;
-			return Turbines.laval;
-		}else if(world.getBlock(x + 3, y, z) == end){
-			direction = ForgeDirection.EAST;
-			return Turbines.laval;
-		}else if(world.getBlock(x, y, z - 3) == end){
-			direction = ForgeDirection.NORTH;
-			return Turbines.laval;
-		}else if(world.getBlock(x, y, z + 3) == end){
-			direction = ForgeDirection.SOUTH;
-			return Turbines.laval;
-		}else{
-			return Turbines.unknown;
-		}
+	public Turbine getType(){
+		return type;
 	}
 	
-	public boolean isRestFilled(World world, int x, int y, int z){
-		if(type == Turbines.tiny){
-			return true;
-		}else if(type == Turbines.laval){
-			if(direction == ForgeDirection.NORTH){
-				if(world.getBlock(x - 1, y - 1, z - 1) == h && world.getBlock(x, y - 1, z - 1) == h && world.getBlock(x + 1, y - 1, z - 1) == h && world.getBlock(x - 1, y, z - 1) == h && world.getBlock(x, y, z - 1) == h
-						&& world.getBlock(x + 1, y, z - 1) == h && world.getBlock(x - 1, y + 1, z - 1) == h && world.getBlock(x, y + 1, z - 1) == h && world.getBlock(x + 1, y + 1, z - 1) == h 
-						&& world.getBlock(x, y, z - 2) == h && world.getBlock(x, y, z - 3) == end){
-					
-					return true;
-				}else{
-					return false;
-				}
-			}else if(direction == ForgeDirection.SOUTH){
-				if(world.getBlock(x - 1, y - 1, z + 1) == h && world.getBlock(x, y - 1, z + 1) == h && world.getBlock(x + 1, y - 1, z + 1) == h && world.getBlock(x - 1, y, z + 1) == h && world.getBlock(x, y, z + 1) == h
-						&& world.getBlock(x + 1, y, z + 1) == h && world.getBlock(x - 1, y + 1, z + 1) == h && world.getBlock(x, y + 1, z + 1) == h && world.getBlock(x + 1, y + 1, z + 1) == h 
-						&& world.getBlock(x, y, z + 2) == h && world.getBlock(x, y, z + 3) == end){
-					
-					return true;
-				}else{
-					return false;
-				}
-			}else if(direction == ForgeDirection.WEST){
-				if(world.getBlock(x - 1, y - 1, z - 1) == h && world.getBlock(x - 1, y - 1, z) == h && world.getBlock(x - 1, y - 1, z + 1) == h && world.getBlock(x - 1, y, z - 1) == h && world.getBlock(x - 1, y, z) == h
-						&& world.getBlock(x - 1, y, z + 1) == h && world.getBlock(x - 1, y + 1, z - 1) == h && world.getBlock(x - 1, y + 1, z) == h && world.getBlock(x - 1, y + 1, z + 1) == h 
-						&& world.getBlock(x - 2, y, z) == h && world.getBlock(x - 3, y, z) == end){
-					
-					return true;
-				}else{
-					return false;
-				}
-			}else if(direction == ForgeDirection.EAST){
-				if(world.getBlock(x + 1, y - 1, z - 1) == h && world.getBlock(x + 1, y - 1, z) == h && world.getBlock(x + 1, y - 1, z + 1) == h && world.getBlock(x + 1, y, z -1) == h && world.getBlock(x + 1, y, z ) == h
-						&& world.getBlock(x + 1, y, z + 1) == h && world.getBlock(x + 1, y + 1, z - 1) == h && world.getBlock(x + 1, y + 1, z) == h && world.getBlock(x + 1, y + 1, z + 1) == h 
-						&& world.getBlock(x + 2, y, z) == h && world.getBlock(x + 3, y, z) == end){
-					
-					return true;
-				}else{
-					return false;
-				}
-			}else{
-				return false;
-			}
-		}else{
-			return false;
-		}
+	public int getNextBlockNumber(){
+		return CurrentBlockAmount + 1;
 	}
 	
-	private void setPartOfMB(World world, int x, int y, int z, ForgeDirection direction, Turbine type, boolean part){
-		if(type == Turbines.tiny){
-			if(direction == ForgeDirection.EAST){
-				TileEntityHousing housing = (TileEntityHousing)world.getTileEntity(x + 1, y, z);
-				housing.setPartOfMultiBlock(part);
-			}
-			if(direction == ForgeDirection.WEST){
-				TileEntityHousing housing = (TileEntityHousing) world.getTileEntity(x - 1, y, z);
-				housing.setPartOfMultiBlock(part);
-			}
-			if(direction == ForgeDirection.NORTH){
-				TileEntityHousing housing = (TileEntityHousing) world.getTileEntity(x, y, z + 1);
-				housing.setPartOfMultiBlock(part);
-			}
-			if(direction == ForgeDirection.SOUTH){
-				TileEntityHousing housing = (TileEntityHousing) world.getTileEntity(x, y, z -1 );
-				housing.setPartOfMultiBlock(part);
-			}
-		}
-		if(type == Turbines.laval){
-			if(direction == ForgeDirection.EAST){
-				for(int i = -1; i  < 1; i++){
-					for(int j = -1; j < 1; j++){
-						TileEntityHousing housing = ((TileEntityHousing)world.getTileEntity(x + 1, y + i, z + j));
-						if(housing != null){
-							housing.setPartOfMultiBlock(part);
-						}
-					}
-				}
-				TileEntityHousing housing1 = (TileEntityHousing) world.getTileEntity(x + 2, y, z);
-				if(housing1 != null){
-					housing1.setPartOfMultiBlock(part);
-				}
-			}
-			if(direction == ForgeDirection.WEST){
-				for(int i = -1; i  < 1; i++){
-					for(int j = -1; j < 1; j++){
-						TileEntityHousing housing = (TileEntityHousing) world.getTileEntity(x - 1, y + i, z + j);
-						if(housing != null){
-							housing.setPartOfMultiBlock(part);
-						}
-					}
-				}
-				TileEntityHousing housing1 = (TileEntityHousing) world.getTileEntity(x - 2, y, z);
-				if(housing1 != null){
-					housing1.setPartOfMultiBlock(part);
-				}
-				
-			}
-			if(direction == ForgeDirection.NORTH){
-				for(int i = -1; i  < 1; i++){
-					for(int j = -1; j < 1; j++){
-						TileEntityHousing housing = (TileEntityHousing) world.getTileEntity(x + j, y + i, z - 1);
-						if(housing != null){
-							housing.setPartOfMultiBlock(part);
-						}
-					}
-				}
-				TileEntityHousing housing1 = (TileEntityHousing) world.getTileEntity(x, y, z - 2);
-				if(housing1 != null){
-					housing1.setPartOfMultiBlock(part);
-				}
+	public int getMaxBlockAmount() {
+		return MaxBlockAmount;
+	}
 
-				
-			}
-			if(direction == ForgeDirection.SOUTH){
-				for(int i = -1; i  < 1; i++){
-					for(int j = -1; j < 1; j++){
-						TileEntityHousing housing = (TileEntityHousing) world.getTileEntity(x + j, y + i, z + 1);
-						if(housing != null){
-							housing.setPartOfMultiBlock(part);
-						}
-					}
-				}
-				TileEntityHousing housing1 = (TileEntityHousing) world.getTileEntity(x, y, z + 2);
-				if(housing1 != null){
-					housing1.setPartOfMultiBlock(part);
-				}
-			}
-		}
+	public void setMaxBlockAmount(int maxBlockAmount) {
+		MaxBlockAmount = maxBlockAmount;
+	}
+
+	public void addBlockToMultiBlock(int x, int y, int z, Block block){
+		int[] var1 = new int[2];
+		var1[0] = x; var1[1] = y; var1[2] = z;
+		this.addBlockToList(var1, block);
 	}
 	
-	public boolean isHousingAlreadyPart(ForgeDirection direction){
-		if(type == Turbines.tiny){
-			if(direction == ForgeDirection.EAST){
-				return ((TileEntityHousing)worldObj.getTileEntity(xCoord + 1, yCoord, zCoord)).isPartOfMultiBlock();
-			}
-			if(direction == ForgeDirection.WEST){
-				return ((TileEntityHousing)worldObj.getTileEntity(xCoord - 1, yCoord, zCoord)).isPartOfMultiBlock();
-			}
-			if(direction == ForgeDirection.NORTH){
-				return ((TileEntityHousing)worldObj.getTileEntity(xCoord, yCoord, zCoord - 1)).isPartOfMultiBlock();
-			}
-			if(direction == ForgeDirection.SOUTH){
-				return ((TileEntityHousing)worldObj.getTileEntity(xCoord + 1, yCoord, zCoord + 1)).isPartOfMultiBlock();
-			}else{
-				return false;
-			}
-		}
-		if(type == Turbines.laval){
-			boolean f = false;
-			if(direction == ForgeDirection.EAST){
-				for(int i = -1; i  < 1; i++){
-					for(int j = -1; j < 1; j++){
-						TileEntityHousing housing = ((TileEntityHousing)worldObj.getTileEntity(xCoord + 1, yCoord + i, zCoord + j));
-						if(housing != null && housing.isPartOfMultiBlock()){
-							f = true;
-						}
-					}
-				}
-				TileEntityHousing housing1 = (TileEntityHousing) worldObj.getTileEntity(xCoord + 2, yCoord, zCoord);
-				if(housing1 != null && housing1.isPartOfMultiBlock()){
-					f = true;
-				}
-			}
-			if(direction == ForgeDirection.WEST){
-				for(int i = -1; i  < 1; i++){
-					for(int j = -1; j < 1; j++){
-						TileEntityHousing housing = ((TileEntityHousing)worldObj.getTileEntity(xCoord - 1, yCoord + i, zCoord + j));
-						if(housing != null && housing.isPartOfMultiBlock()){
-							f = true;
-						}
-					}
-				}
-				TileEntityHousing housing1 = (TileEntityHousing) worldObj.getTileEntity(xCoord - 2, yCoord, zCoord);
-				if(housing1 != null && housing1.isPartOfMultiBlock()){
-					f = true;
-				}
-			}
-			if(direction == ForgeDirection.NORTH){
-				for(int i = -1; i  < 1; i++){
-					for(int j = -1; j < 1; j++){
-						TileEntityHousing housing = ((TileEntityHousing)worldObj.getTileEntity(xCoord + j, yCoord + i, zCoord - 1));
-						if(housing != null && housing.isPartOfMultiBlock()){
-							f = true;
-						}
-					}
-				}
-				TileEntityHousing housing1 = (TileEntityHousing) worldObj.getTileEntity(xCoord, yCoord, zCoord - 2);
-				if(housing1 != null && housing1.isPartOfMultiBlock()){
-					f = true;
-				}
-			}
-			if(direction == ForgeDirection.SOUTH){
-				for(int i = -1; i  < 1; i++){
-					for(int j = -1; j < 1; j++){
-						TileEntityHousing housing = ((TileEntityHousing)worldObj.getTileEntity(xCoord + j, yCoord + i, zCoord + 1));
-						if(housing != null && housing.isPartOfMultiBlock()){
-							f = true;
-						}
-					}
-				}
-				TileEntityHousing housing1 = (TileEntityHousing) worldObj.getTileEntity(xCoord, yCoord, zCoord + 2);
-				if(housing1 != null && housing1.isPartOfMultiBlock()){
-					f = true;
-				}
-
-			}
-			return f;
-		}else{
-			return false;
-		}
+	public void addBlockToList(int[] par1, Block block){
+		if(par1.length == 3) locations.add(par1);
+		if(block != null) blocks.add(block);
 	}
+	
+	public ArrayList<int[]> getLocations(){
+		return locations;
+	}
+	
+	public ArrayList<Block> getBlocks(){
+		return blocks;
+	}
+	
+	public ForgeDirection getDirection(){
+		return this.direction;
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbt){
+		super.writeToNBT(nbt);
+		tank.writeToNBT(nbt);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbt){
+		super.readFromNBT(nbt);
+		tank.readFromNBT(nbt);
+	}
+	
+	
 
 	@Override
 	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
@@ -383,5 +136,77 @@ public class TileEntityTurbineBasic extends AzhdevTileEntity implements IFluidHa
 	@Override
 	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
 		return null;
+	}
+
+	@Override
+	public int getSizeInventory() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int p_70301_1_) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getInventoryName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void openInventory() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void closeInventory() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

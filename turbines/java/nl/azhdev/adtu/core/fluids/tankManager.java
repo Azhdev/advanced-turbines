@@ -1,4 +1,4 @@
-package nl.azhdev.adtu.core.fluids;
+package nl.Azhdev.adtu.core.fluids;
 
 public class tankManager {
 

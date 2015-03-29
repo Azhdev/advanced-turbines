@@ -1,8 +1,8 @@
-package nl.azhdev.adtu.core.generic;
+package nl.Azhdev.adtu.core.generic;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import nl.azhdev.adtu.core.util.CreativeTabAT;
+import nl.Azhdev.adtu.core.util.CreativeTabAT;
 
 public class GenericAzhdevBlock extends Block{
 

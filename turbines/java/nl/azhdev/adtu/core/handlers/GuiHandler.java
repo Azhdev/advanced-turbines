@@ -1,11 +1,11 @@
-package nl.azhdev.adtu.core.handlers;
+package nl.Azhdev.adtu.core.handlers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import nl.azhdev.adtu.core.TileEntities.custom.TileEntityTurbine;
-import nl.azhdev.adtu.core.client.containers.ContainerTurbine;
-import nl.azhdev.adtu.core.client.guis.GUITurbine;
+import nl.Azhdev.adtu.client.containers.ContainerTurbine;
+import nl.Azhdev.adtu.client.guis.GUITurbine;
+import nl.Azhdev.adtu.core.TileEntities.custom.TileEntityTurbineBasic;
 import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler{
@@ -15,8 +15,8 @@ public class GuiHandler implements IGuiHandler{
 		switch(ID){
 		case 0:
 			TileEntity te = world.getTileEntity(x, y, z);
-			if (te != null && te instanceof TileEntityTurbine) {
-				return new ContainerTurbine(player.inventory, (TileEntityTurbine)te);
+			if (te != null && te instanceof TileEntityTurbineBasic) {
+				return new ContainerTurbine(player.inventory, (TileEntityTurbineBasic)te);
 			}
 			break;
 
@@ -29,8 +29,8 @@ public class GuiHandler implements IGuiHandler{
 		switch(ID){
 		case 0:
 			TileEntity te = world.getTileEntity(x, y, z);
-			if (te != null && te instanceof TileEntityTurbine) {
-				return new GUITurbine(player.inventory, (TileEntityTurbine)te);
+			if (te != null && te instanceof TileEntityTurbineBasic) {
+				return new GUITurbine(player.inventory, (TileEntityTurbineBasic)te);
 			}
 			break;
 

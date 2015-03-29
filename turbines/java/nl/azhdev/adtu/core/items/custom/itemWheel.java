@@ -1,7 +1,14 @@
-package nl.azhdev.adtu.core.items.custom;
+package nl.Azhdev.adtu.core.items.custom;
 
-import nl.azhdev.adtu.core.generic.GenericAzhdevItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import nl.Azhdev.adtu.core.generic.GenericAzhdevItem;
 
 public class itemWheel extends GenericAzhdevItem {
-
+	
+	public itemWheel(){
+		super();
+		setMaxDamage(5);
+		setMaxStackSize(1);
+	}
 }

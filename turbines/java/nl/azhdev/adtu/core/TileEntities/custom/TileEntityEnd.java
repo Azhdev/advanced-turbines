@@ -1,15 +1,16 @@
-package nl.azhdev.adtu.core.TileEntities.custom;
+package nl.Azhdev.adtu.core.TileEntities.custom;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
-import nl.azhdev.adtu.core.generic.AzhdevTileEntity;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 
 public class TileEntityEnd extends TileEntityHousing implements IEnergyHandler{
 		
 	private EnergyStorage buffer;
+	
+	private int energyToOutput = 0;
 	
 	public TileEntityEnd(){
 		buffer = new EnergyStorage(1000, 200);
@@ -23,24 +24,30 @@ public class TileEntityEnd extends TileEntityHousing implements IEnergyHandler{
 					TileEntity ent = worldObj.getTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
 					if(ent != null && ent instanceof IEnergyHandler){
 						IEnergyHandler handler = (IEnergyHandler)ent;
-						handler.receiveEnergy(dir.getOpposite(), 40, false);
-						this.extractEnergy(dir, 40, false);
+						handler.receiveEnergy(dir.getOpposite(), energyToOutput, false);
+						this.extractEnergy(dir, energyToOutput, false);
 					}
 				}
 			}
 		}
 	}
 	
+	public void setEnergy(int amount){
+		energyToOutput = amount;
+	}
+
 	@Override
 	public void writeToNBT(NBTTagCompound compound){
 		super.writeToNBT(compound);
 		buffer.writeToNBT(compound);
+		compound.setInteger("energyOut", energyToOutput);
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound){
 		super.readFromNBT(compound);
 		buffer.readFromNBT(compound);
+		energyToOutput = compound.getInteger("energyOut");
 	}
 	
 //----------------------

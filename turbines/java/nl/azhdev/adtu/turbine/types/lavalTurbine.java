@@ -1,7 +1,7 @@
-package nl.azhdev.adtu.turbine.types;
+package nl.Azhdev.adtu.turbine.types;
 
-import nl.azhdev.adtu.core.blocks.adtuBlocks;
-import nl.azhdev.adtu.turbine.Turbine;
+import nl.Azhdev.adtu.core.blocks.adtuBlocks;
+import nl.Azhdev.adtu.turbine.Turbine;
 
 public class lavalTurbine extends Turbine{
 
