@@ -1,0 +1,16 @@
+[
+{
+  "modid": "adtu",
+  "name": "Advanced Turbines",
+  "description": "need to make a description",
+  "version": "1.7.10-dev01",
+  "mcversion": "1.7.10",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ['Azhdev'],
+  "credits": "",
+  "logoFile": "/assets/logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
